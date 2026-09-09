@@ -20,10 +20,23 @@ SALANKARIK is a production-ready internal administration dashboard for managing 
 **Phase 4: Backend API Build (In Progress)**
 - **Module 1: Authentication** - Fully implemented and verified.
   - Setup `@nestjs/passport` and `@nestjs/jwt`.
-  - Created `LoginDto` validated by global `class-validator` pipes.
-  - Secure `/auth/login` endpoint issuing JWTs.
-  - Secure `/auth/me` and `/auth/admin-only` utilizing `JwtAuthGuard` and custom `RolesGuard` for RBAC.
-  - Created a Postman Collection (`postman_collection.json`) documenting API endpoints.
+  - Secure `/auth/login`, `/auth/me` and `/auth/admin-only` utilizing `JwtAuthGuard` and custom `RolesGuard` for RBAC.
+- **Module 2: Products** - Fully implemented and verified.
+  - CRUD for Products with pagination and comprehensive filtering.
+  - Cloudinary integration via Multer `FileInterceptor` for secure product image uploads.
+  - Atomic generation of `Inventory` rows upon product creation.
+- **Module 3: Inventory** - Fully implemented and verified.
+  - Stock retrieval endpoints (`GET /inventory`).
+  - Stock adjustment (`PATCH /inventory/:productId`) utilizing strict `pessimistic_write` TypeORM lock transactions.
+  - Automatic historical auditing written to `inventory_history`.
+- **Module 4: Customers** - Fully implemented and verified.
+  - Paginated customer listings with `ILIKE` searching.
+  - Detailed relational fetches joining `Customer` -> `Address` and `Order` objects safely.
+- **Module 5: Orders** - Fully implemented and verified.
+  - Paginated order listings with dynamic status and payment filtering.
+  - Robust detail retrieval unpacking `OrderItem`, `Product`, `Payment`, and `Shipment` relations.
+  - Validation-backed endpoints to transition `OrderStatus` strings.
+- **Postman Documentation** - Iteratively updated `postman_collection.json` containing tests for all the above endpoints.
 
 ## Project Architecture
 

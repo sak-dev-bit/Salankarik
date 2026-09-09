@@ -27,8 +27,12 @@ import { ActivityLogModule } from './activity-log/activity-log.module.js';
       useFactory: (configService: ConfigService) => ({
         type: 'postgres',
         url: configService.get<string>('DATABASE_URL'),
-        autoLoadEntities: true,
-        synchronize: true, // For development only!
+        ssl: {
+          rejectUnauthorized: false, // For Neon DB
+        },
+        entities: ['dist/**/*.entity.js'],
+        autoLoadEntities: false,
+        synchronize: false, // Migrations used instead
       }),
       inject: [ConfigService],
     }),

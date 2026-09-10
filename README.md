@@ -42,6 +42,12 @@ SALANKARIK is a production-ready internal administration dashboard for managing 
 - **Module 7: Payments** - Fully implemented and verified.
   - Paginated payment listings securely restricted to `ADMIN` and `STAFF`.
   - Nested resolution bringing in associated `Order` and `Customer` details per payment record.
+- **Module 8: Dashboard / Analytics** - Fully implemented and verified.
+  - Generates top-level aggregated SQL KPIs: Total Revenue, Total Orders, Today's Sales, and Low Stock Alerts dynamically without heavy database overhead.
+- **Module 9: Activity Logging** - Fully implemented and verified.
+  - Implemented `ActivityLogInterceptor` dynamically intercepting all `POST`, `PATCH`, and `DELETE` requests globally across the backend.
+  - Maps mutation logs to `admin_id` directly through JWT extraction.
+  - Provides a `/activity-logs` endpoint with strict access control allowing administrators to audit the system efficiently.
 - **Postman Documentation** - Iteratively updated `postman_collection.json` containing tests for all the above endpoints.
 
 ## Project Architecture

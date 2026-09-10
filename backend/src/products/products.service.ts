@@ -9,6 +9,7 @@ import { Inventory } from '../inventory/entities/inventory.entity.js';
 import { CreateProductDto } from './dto/create-product.dto.js';
 import { UpdateProductDto } from './dto/update-product.dto.js';
 import { GetProductsFilterDto } from './dto/get-products-filter.dto.js';
+import { ActivityLogService } from '../activity-log/activity-log.service.js';
 
 @Injectable()
 export class ProductsService {
@@ -22,6 +23,7 @@ export class ProductsService {
     @InjectRepository(ProductImage)
     private readonly productImageRepository: Repository<ProductImage>,
     private readonly dataSource: DataSource,
+    private readonly activityLogService: ActivityLogService,
   ) {}
 
   async create(createProductDto: CreateProductDto) {

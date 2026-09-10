@@ -36,6 +36,12 @@ SALANKARIK is a production-ready internal administration dashboard for managing 
   - Paginated order listings with dynamic status and payment filtering.
   - Robust detail retrieval unpacking `OrderItem`, `Product`, `Payment`, and `Shipment` relations.
   - Validation-backed endpoints to transition `OrderStatus` strings.
+- **Module 6: Discounts** - Fully implemented and verified.
+  - Comprehensive CRUD for Discount management (`POST`, `GET`, `PATCH`, `DELETE`).
+  - Validation-backed `class-validator` restrictions for discount criteria and types (`percentage`, `fixed_amount`, `free_shipping`).
+- **Module 7: Payments** - Fully implemented and verified.
+  - Paginated payment listings securely restricted to `ADMIN` and `STAFF`.
+  - Nested resolution bringing in associated `Order` and `Customer` details per payment record.
 - **Postman Documentation** - Iteratively updated `postman_collection.json` containing tests for all the above endpoints.
 
 ## Project Architecture

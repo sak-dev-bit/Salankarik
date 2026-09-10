@@ -1,0 +1,256 @@
+<div class="space-y-6 max-w-7xl mx-auto">
+  <!-- Header -->
+  <div>
+    <div class="flex items-center text-amber-700 text-xs font-bold tracking-widest uppercase mb-2">
+      <svg lucideDiamond class="w-4 h-4 mr-2"></svg>
+      Salon Executive Command
+    </div>
+    <h1 class="text-3xl font-serif text-gray-900">Atelier Overview & Performance</h1>
+    <p class="text-gray-500 mt-1 text-sm">Real-time commerce metrics, vault inventory movements, and bespoke client pipeline for salankarik.com</p>
+  </div>
+
+  <!-- Filters -->
+  <div class="flex items-center space-x-2 border-b border-gray-200 pb-2 overflow-x-auto">
+    <button class="px-4 py-1.5 bg-[#1E2756] text-white text-sm font-medium rounded-md shadow-sm">Today</button>
+    <button class="px-4 py-1.5 text-gray-600 hover:bg-gray-100 text-sm font-medium rounded-md">7 Days</button>
+    <button class="px-4 py-1.5 text-gray-600 hover:bg-gray-100 text-sm font-medium rounded-md">30 Days</button>
+    <button class="px-4 py-1.5 text-gray-600 hover:bg-gray-100 text-sm font-medium rounded-md">This Month</button>
+    <button class="px-4 py-1.5 text-gray-600 hover:bg-gray-100 text-sm font-medium rounded-md">This Year</button>
+    <button class="px-4 py-1.5 text-gray-600 hover:bg-gray-100 text-sm font-medium rounded-md">Custom</button>
+    
+    <div class="ml-auto flex items-center text-xs text-gray-500 whitespace-nowrap pl-4">
+      <svg lucideClock class="w-3 h-3 mr-1"></svg> Sync timestamp: Live
+    </div>
+  </div>
+
+  <!-- KPI Cards Skeleton -->
+  <div *ngIf="isLoadingKpis()" class="grid grid-cols-1 md:grid-cols-5 gap-4">
+    <div *ngFor="let i of [1,2,3,4,5]" class="bg-white p-5 rounded-xl border border-gray-100 shadow-sm animate-pulse">
+      <div class="h-4 bg-gray-200 rounded w-1/2 mb-4"></div>
+      <div class="h-8 bg-gray-200 rounded w-3/4 mb-2"></div>
+      <div class="h-3 bg-gray-200 rounded w-1/3"></div>
+    </div>
+  </div>
+
+  <!-- KPI Cards Loaded -->
+  <div *ngIf="!isLoadingKpis() && kpis()" class="grid grid-cols-1 md:grid-cols-5 gap-4">
+    <!-- Today's Sales -->
+    <div class="bg-white p-5 rounded-xl border border-gray-100 shadow-sm flex flex-col justify-between">
+      <p class="text-xs font-semibold text-gray-500 tracking-wider uppercase">Today's Sales</p>
+      <div class="mt-2">
+        <h3 class="text-2xl font-bold text-gray-900">₹{{ kpis()?.todaySales?.toLocaleString('en-IN') || 0 }}</h3>
+        <div class="flex items-center mt-1">
+          <span class="inline-flex items-center px-1.5 py-0.5 rounded text-xs font-medium bg-green-100 text-green-800">
+            <svg lucideArrowUpRight class="w-3 h-3 mr-0.5"></svg> 18.4%
+          </span>
+          <span class="text-xs text-gray-500 ml-2">vs yesterday</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Today's Orders -->
+    <div class="bg-white p-5 rounded-xl border border-gray-100 shadow-sm flex flex-col justify-between">
+      <p class="text-xs font-semibold text-gray-500 tracking-wider uppercase">Today's Orders</p>
+      <div class="mt-2">
+        <h3 class="text-2xl font-bold text-gray-900">{{ kpis()?.todayOrders }} Orders</h3>
+        <div class="flex items-center mt-1">
+          <span class="inline-flex items-center px-1.5 py-0.5 rounded text-xs font-medium bg-green-100 text-green-800">
+            <svg lucideArrowUpRight class="w-3 h-3 mr-0.5"></svg> 12.5%
+          </span>
+          <span class="text-xs text-gray-500 ml-2">vs average day</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Month Revenue -->
+    <div class="bg-white p-5 rounded-xl border border-gray-100 shadow-sm flex flex-col justify-between">
+      <p class="text-xs font-semibold text-gray-500 tracking-wider uppercase">Month Revenue</p>
+      <div class="mt-2">
+        <h3 class="text-2xl font-bold text-gray-900">₹{{ kpis()?.totalRevenue?.toLocaleString('en-IN') || 0 }}</h3>
+        <div class="flex items-center mt-1">
+          <span class="inline-flex items-center px-1.5 py-0.5 rounded text-xs font-medium bg-green-100 text-green-800">
+            <svg lucideArrowUpRight class="w-3 h-3 mr-0.5"></svg> 24.2%
+          </span>
+          <span class="text-xs text-gray-500 ml-2">vs last month</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Total Patrons -->
+    <div class="bg-white p-5 rounded-xl border border-gray-100 shadow-sm flex flex-col justify-between">
+      <p class="text-xs font-semibold text-gray-500 tracking-wider uppercase">Total Patrons</p>
+      <div class="mt-2">
+        <h3 class="text-2xl font-bold text-gray-900">{{ kpis()?.totalPatrons?.toLocaleString('en-IN') }}</h3>
+        <div class="flex items-center mt-1">
+          <span class="inline-flex items-center px-1.5 py-0.5 rounded text-xs font-medium bg-green-100 text-green-800">
+            <svg lucideArrowUpRight class="w-3 h-3 mr-0.5"></svg> +145 new
+          </span>
+          <span class="text-xs text-gray-500 ml-2">this past week</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Avg Order Value -->
+    <div class="bg-white p-5 rounded-xl border border-gray-100 shadow-sm flex flex-col justify-between">
+      <p class="text-xs font-semibold text-gray-500 tracking-wider uppercase">Avg. Order Value</p>
+      <div class="mt-2">
+        <h3 class="text-2xl font-bold text-gray-900">₹{{ kpis()?.avgOrderValue?.toLocaleString('en-IN') }}</h3>
+        <div class="flex items-center mt-1">
+          <span class="inline-flex items-center px-1.5 py-0.5 rounded text-xs font-medium bg-green-100 text-green-800">
+            <svg lucideArrowUpRight class="w-3 h-3 mr-0.5"></svg> 6.8%
+          </span>
+          <span class="text-xs text-gray-500 ml-2">MoM expansion</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Chart & Logistics Row -->
+  <div class="bg-white p-6 rounded-xl border border-gray-100 shadow-sm">
+    <div class="flex justify-between items-start mb-6">
+      <div>
+        <h3 class="text-lg font-bold text-gray-900">Financial Trajectory & Dispatch Volume</h3>
+        <p class="text-sm text-gray-500">Aggregated revenue performance with historical trend overlays</p>
+      </div>
+      <div class="flex bg-gray-100 rounded-md p-1">
+        <button class="px-3 py-1 bg-white shadow-sm rounded text-xs font-semibold">Revenue (₹)</button>
+        <button class="px-3 py-1 text-gray-500 hover:text-gray-900 text-xs font-semibold">Orders Count</button>
+      </div>
+    </div>
+    
+    <div class="relative h-80 w-full">
+      <canvas #revenueChart></canvas>
+    </div>
+    
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mt-6">
+      <div class="bg-gray-50 p-4 rounded-lg flex items-center">
+        <svg lucideTrendingUp class="w-8 h-8 text-gray-400 mr-3"></svg>
+        <div>
+          <p class="text-[10px] uppercase font-bold text-gray-500 tracking-wider">Sales Peak Recorded</p>
+          <p class="text-sm font-bold text-gray-900">Oct 21 (₹2,10,400)</p>
+        </div>
+      </div>
+      <div class="bg-gray-50 p-4 rounded-lg flex items-center">
+        <div class="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center mr-3">
+          <span class="text-green-700 font-bold text-xs">%</span>
+        </div>
+        <div>
+          <p class="text-[10px] uppercase font-bold text-gray-500 tracking-wider">Store Conversion Rate</p>
+          <p class="text-sm font-bold text-gray-900">3.82% <span class="text-green-600 text-xs font-normal">+0.41%</span></p>
+        </div>
+      </div>
+      <div class="bg-amber-50 border border-amber-100 p-4 rounded-lg flex items-center">
+        <svg lucideShieldCheck class="w-8 h-8 text-amber-500 mr-3"></svg>
+        <div>
+          <p class="text-[10px] uppercase font-bold text-amber-800 tracking-wider">BIS Hallmarking Purity</p>
+          <p class="text-sm font-bold text-amber-900">100% Certified</p>
+        </div>
+      </div>
+      <div class="bg-gray-50 p-4 rounded-lg flex items-center">
+        <svg lucidePackage class="w-8 h-8 text-gray-400 mr-3"></svg>
+        <div>
+          <p class="text-[10px] uppercase font-bold text-gray-500 tracking-wider">Vault Fulfillment Speed</p>
+          <p class="text-sm font-bold text-gray-900">< 18 hrs SLA</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom Row: Top Performers & Stock Alerts -->
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <!-- Top Performers -->
+    <div class="lg:col-span-2 bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden">
+      <div class="p-5 border-b border-gray-100 flex justify-between items-center">
+        <div>
+          <h3 class="text-lg font-bold text-gray-900">Boutique Top Performers</h3>
+          <p class="text-sm text-gray-500">Highest volume and revenue drivers</p>
+        </div>
+        <a routerLink="/products" class="text-sm font-medium text-[#1E2756] hover:underline">Full Catalog &rarr;</a>
+      </div>
+      <div class="overflow-x-auto">
+        <table class="min-w-full divide-y divide-gray-200">
+          <thead class="bg-gray-50">
+            <tr>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Jewellery Piece</th>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Specification</th>
+              <th scope="col" class="px-6 py-3 text-right text-xs font-bold text-gray-500 uppercase tracking-wider">Units Sold</th>
+              <th scope="col" class="px-6 py-3 text-right text-xs font-bold text-gray-500 uppercase tracking-wider">Gross Revenue</th>
+            </tr>
+          </thead>
+          <tbody class="bg-white divide-y divide-gray-200">
+            <tr *ngFor="let item of topPerformers()" class="hover:bg-gray-50 transition-colors">
+              <td class="px-6 py-4 whitespace-nowrap">
+                <div class="flex items-center">
+                  <div class="flex-shrink-0 h-10 w-10">
+                    <img class="h-10 w-10 rounded-md object-cover" [src]="item.img" alt="">
+                  </div>
+                  <div class="ml-4">
+                    <div class="text-sm font-bold text-gray-900">{{ item.name }}</div>
+                    <div class="text-xs text-gray-500">SKU: {{ item.sku }}</div>
+                  </div>
+                </div>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap">
+                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-amber-100 text-amber-800">
+                  {{ item.spec }}
+                </span>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap text-right text-sm text-gray-900 font-medium">
+                {{ item.units }} units
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-bold text-gray-900">
+                ₹{{ item.revenue.toLocaleString('en-IN') }}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Stock Alerts -->
+    <div class="bg-white rounded-xl border border-gray-100 shadow-sm flex flex-col">
+      <div class="p-5 border-b border-gray-100 flex justify-between items-center">
+        <h3 class="text-lg font-bold text-gray-900 flex items-center">
+          <svg lucideAlertTriangle class="w-5 h-5 text-red-500 mr-2"></svg>
+          Atelier Stock Reorder Alerts
+        </h3>
+        <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-red-100 text-red-800">
+          {{ lowStock().length }} Urgent
+        </span>
+      </div>
+      
+      <div class="flex-1 overflow-y-auto p-2">
+        <ul class="space-y-2">
+          <li *ngIf="lowStock().length === 0" class="p-4 text-center text-gray-500 text-sm">
+            All inventory levels are healthy.
+          </li>
+          
+          <li *ngFor="let item of lowStock()" class="p-3 rounded-lg border border-gray-100 hover:bg-gray-50 flex justify-between items-center group transition-colors">
+            <div class="flex items-center">
+              <div class="w-10 h-10 rounded-md bg-amber-50 flex items-center justify-center mr-3 border border-amber-100">
+                <svg lucideDiamond class="w-5 h-5 text-amber-600"></svg>
+              </div>
+              <div>
+                <p class="text-sm font-bold text-gray-900">{{ item.name }}</p>
+                <p class="text-xs text-red-600 font-medium mt-0.5" *ngIf="item.inventory?.quantity === 0">0 stock (Sold Out)</p>
+                <p class="text-xs text-amber-600 font-medium mt-0.5" *ngIf="item.inventory?.quantity > 0">{{ item.inventory?.quantity }} pieces remaining</p>
+              </div>
+            </div>
+            <button class="px-3 py-1 bg-white border border-gray-200 shadow-sm rounded text-xs font-semibold text-gray-700 hover:bg-gray-50">
+              Restock
+            </button>
+          </li>
+        </ul>
+      </div>
+      
+      <div class="p-4 bg-[#1E2756] text-white rounded-b-xl flex items-center justify-between">
+        <div>
+          <p class="text-[10px] font-bold text-blue-200 tracking-wider uppercase">Insured Vault Value</p>
+          <p class="text-xl font-bold">₹1,84,20,000</p>
+          <p class="text-[10px] text-blue-300">Audited by GIA & BIS Directorate</p>
+        </div>
+        <svg lucideShieldCheck class="w-8 h-8 text-blue-300 opacity-50"></svg>
+      </div>
+    </div>
+  </div>
+</div>

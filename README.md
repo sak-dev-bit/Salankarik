@@ -17,7 +17,7 @@ SALANKARIK is a production-ready internal administration dashboard for managing 
 - Generated and executed schema migrations.
 - Implemented robust development seeding (`pnpm run seed`) creating foundational Admin, Customer, Category, Product, Inventory, and Order data.
 
-**Phase 4: Backend API Build (In Progress)**
+**Phase 4: Backend API Build (Completed)**
 - **Module 1: Authentication** - Fully implemented and verified.
   - Setup `@nestjs/passport` and `@nestjs/jwt`.
   - Secure `/auth/login`, `/auth/me` and `/auth/admin-only` utilizing `JwtAuthGuard` and custom `RolesGuard` for RBAC.
@@ -49,6 +49,12 @@ SALANKARIK is a production-ready internal administration dashboard for managing 
   - Maps mutation logs to `admin_id` directly through JWT extraction.
   - Provides a `/activity-logs` endpoint with strict access control allowing administrators to audit the system efficiently.
 - **Postman Documentation** - Iteratively updated `postman_collection.json` containing tests for all the above endpoints.
+
+**Phase 5: Frontend Build (In Progress)**
+- **Step 1: Authentication** - Fully implemented. Configured Tailwind v4, environments, `AuthService` with Signals, login view, and HTTP interceptors.
+- **Step 2: Application Shell** - Fully implemented. Built layout architecture (`SidebarComponent`, `TopbarComponent`, `ShellComponent`) leveraging `lucide-angular` standalone icons and router outlets.
+- **Step 3: Dashboard** - Fully implemented. Developed analytical KPI cards, `Chart.js` financial trajectory graphics, boutique top performers list, and stock reorder alerts dynamically fetching from NestJS.
+- **Step 4: Products** - Fully implemented. Engineered the Products Catalog datagrid and a comprehensive Reactive Form for New/Edit modes, including direct frontend integration for Cloudinary image uploads.
 
 ## Project Architecture
 

@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, UseGuards, Request, Query } from '@nestjs/common';
+import { Controller, Get, Body, Patch, Param, UseGuards, Request, Query } from '@nestjs/common';
 import { InventoryService } from './inventory.service.js';
 import { AdjustInventoryDto } from './dto/adjust-inventory.dto.js';
 import { AuthGuard } from '@nestjs/passport';

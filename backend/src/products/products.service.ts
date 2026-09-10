@@ -1,6 +1,6 @@
-import { Injectable, NotFoundException, ConflictException, BadRequestException } from '@nestjs/common';
+import { Injectable, NotFoundException, ConflictException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, DataSource, ILike } from 'typeorm';
+import { Repository, DataSource } from 'typeorm';
 import { Product } from './entities/product.entity.js';
 import { Category } from './entities/category.entity.js';
 import { Collection } from './entities/collection.entity.js';
@@ -165,7 +165,7 @@ export class ProductsService {
   }
 
   async addImage(productId: string, url: string) {
-    const product = await this.findOne(productId);
+    const _product = await this.findOne(productId);
     
     const imageCount = await this.productImageRepository.count({ where: { product_id: productId } });
     

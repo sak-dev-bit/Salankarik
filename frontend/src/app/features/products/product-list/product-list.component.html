@@ -1,0 +1,155 @@
+<div class="space-y-6 max-w-7xl mx-auto">
+  <!-- Header -->
+  <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+    <div>
+      <h1 class="text-3xl font-serif text-gray-900">Products Catalog</h1>
+      <p class="text-gray-500 mt-1 text-sm">Manage jewellery listings, metadata, and atelier specifications</p>
+    </div>
+    <a routerLink="/products/new" class="inline-flex items-center px-4 py-2 bg-[#1E2756] hover:bg-[#2A3676] text-white text-sm font-medium rounded-md shadow-sm transition-colors">
+      <svg lucidePlus class="w-4 h-4 mr-2"></svg>
+      Add Product
+    </a>
+  </div>
+
+  <!-- Filters & Search -->
+  <div class="bg-white p-4 rounded-xl border border-gray-200 shadow-sm flex flex-col sm:flex-row justify-between items-center gap-4">
+    <div class="relative w-full sm:max-w-xs">
+      <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+        <svg lucideSearch class="h-4 w-4 text-gray-400"></svg>
+      </div>
+      <input type="text" [formControl]="searchControl" placeholder="Search by name, SKU, or category..." 
+        class="block w-full pl-10 pr-3 py-2 border border-gray-200 rounded-md leading-5 bg-gray-50 placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:border-[#1E2756] focus:ring-1 focus:ring-[#1E2756] sm:text-sm transition-colors">
+    </div>
+    
+    <div class="flex items-center space-x-3 w-full sm:w-auto">
+      <select class="block w-full pl-3 pr-10 py-2 text-base border-gray-200 focus:outline-none focus:ring-[#1E2756] focus:border-[#1E2756] sm:text-sm rounded-md bg-gray-50">
+        <option>All Categories</option>
+        <option>Rings</option>
+        <option>Necklaces</option>
+        <option>Earrings</option>
+        <option>Bracelets</option>
+      </select>
+      <select class="block w-full pl-3 pr-10 py-2 text-base border-gray-200 focus:outline-none focus:ring-[#1E2756] focus:border-[#1E2756] sm:text-sm rounded-md bg-gray-50">
+        <option>All Status</option>
+        <option>Active</option>
+        <option>Draft</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Table -->
+  <div class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+    <div class="overflow-x-auto">
+      <table class="min-w-full divide-y divide-gray-200">
+        <thead class="bg-gray-50">
+          <tr>
+            <th scope="col" class="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Product</th>
+            <th scope="col" class="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">SKU & Specs</th>
+            <th scope="col" class="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Price</th>
+            <th scope="col" class="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Status</th>
+            <th scope="col" class="relative px-6 py-3">
+              <span class="sr-only">Actions</span>
+            </th>
+          </tr>
+        </thead>
+        <tbody class="bg-white divide-y divide-gray-200">
+          
+          <!-- Loading State -->
+          <tr *ngIf="isLoading()">
+            <td colspan="5" class="px-6 py-12 text-center">
+              <div class="inline-flex items-center justify-center space-x-2 animate-pulse">
+                <div class="w-2 h-2 bg-[#1E2756] rounded-full"></div>
+                <div class="w-2 h-2 bg-[#1E2756] rounded-full"></div>
+                <div class="w-2 h-2 bg-[#1E2756] rounded-full"></div>
+              </div>
+              <p class="mt-2 text-sm text-gray-500">Loading catalog...</p>
+            </td>
+          </tr>
+
+          <!-- Empty State -->
+          <tr *ngIf="!isLoading() && products().length === 0">
+            <td colspan="5" class="px-6 py-12 text-center">
+              <svg lucidePackage class="mx-auto h-12 w-12 text-gray-300"></svg>
+              <h3 class="mt-2 text-sm font-medium text-gray-900">No products found</h3>
+              <p class="mt-1 text-sm text-gray-500">Get started by creating a new jewellery piece.</p>
+              <div class="mt-6">
+                <a routerLink="/products/new" class="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-[#1E2756] hover:bg-[#2A3676]">
+                  <svg lucidePlus class="-ml-1 mr-2 h-5 w-5"></svg> Add Product
+                </a>
+              </div>
+            </td>
+          </tr>
+
+          <!-- Data Rows -->
+          <ng-container *ngIf="!isLoading()">
+            <tr *ngFor="let product of products()" class="hover:bg-gray-50 transition-colors">
+              <td class="px-6 py-4 whitespace-nowrap">
+                <div class="flex items-center">
+                  <div class="flex-shrink-0 h-12 w-12 bg-gray-100 rounded-md border border-gray-200 flex items-center justify-center overflow-hidden">
+                    <img *ngIf="getPrimaryImage(product)" [src]="getPrimaryImage(product)" class="h-12 w-12 object-cover">
+                    <svg *ngIf="!getPrimaryImage(product)" lucideImage class="h-6 w-6 text-gray-400"></svg>
+                  </div>
+                  <div class="ml-4">
+                    <div class="text-sm font-bold text-gray-900">{{ product.name }}</div>
+                    <div class="text-xs text-gray-500 mt-0.5">{{ product.category }}</div>
+                  </div>
+                </div>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap">
+                <div class="text-sm text-gray-900 font-medium">{{ product.sku }}</div>
+                <div class="text-xs text-gray-500 mt-0.5">{{ product.metalType }} &bull; {{ product.purity }} &bull; {{ product.weightGrams }}g</div>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap">
+                <div class="text-sm font-bold text-gray-900">₹{{ product.basePrice.toLocaleString('en-IN') }}</div>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap">
+                <span class="px-2.5 py-0.5 inline-flex text-xs leading-5 font-semibold rounded-full"
+                      [ngClass]="product.isActive ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'">
+                  {{ product.isActive ? 'Active' : 'Draft' }}
+                </span>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                <div class="flex items-center justify-end space-x-3">
+                  <a [routerLink]="['/products', product.id, 'edit']" class="text-[#1E2756] hover:text-[#2A3676] bg-gray-50 hover:bg-gray-100 p-1.5 rounded-md transition-colors" title="Edit">
+                    <svg lucideEdit class="h-4 w-4"></svg>
+                  </a>
+                  <button (click)="deleteProduct(product.id)" class="text-red-600 hover:text-red-900 bg-red-50 hover:bg-red-100 p-1.5 rounded-md transition-colors" title="Delete">
+                    <svg lucideTrash2 class="h-4 w-4"></svg>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </ng-container>
+        </tbody>
+      </table>
+    </div>
+    
+    <!-- Pagination -->
+    <div class="bg-white px-4 py-3 border-t border-gray-200 flex items-center justify-between sm:px-6" *ngIf="total() > 0">
+      <div class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
+        <div>
+          <p class="text-sm text-gray-700">
+            Showing <span class="font-medium">{{ (page() - 1) * limit() + 1 }}</span> to 
+            <span class="font-medium">{{ Math.min(page() * limit(), total()) }}</span> of 
+            <span class="font-medium">{{ total() }}</span> results
+          </p>
+        </div>
+        <div>
+          <nav class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
+            <button (click)="changePage(page() - 1)" [disabled]="page() === 1" class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed">
+              <span class="sr-only">Previous</span>
+              &larr;
+            </button>
+            <span class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700">
+              Page {{ page() }} of {{ totalPages() }}
+            </span>
+            <button (click)="changePage(page() + 1)" [disabled]="page() === totalPages()" class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed">
+              <span class="sr-only">Next</span>
+              &rarr;
+            </button>
+          </nav>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,4 +1,3 @@
-import type { Relation } from 'typeorm';
 import {  Entity, PrimaryGeneratedColumn, Column, CreateDateColumn  } from 'typeorm';
 
 export enum DiscountType {
